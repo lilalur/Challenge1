@@ -43,6 +43,12 @@
     kbd {
         display: block;
         font-size: 40px;
+        pointer-events: none;
+        user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -o-user-select: none;
     }
 
     .sound {
@@ -50,12 +56,18 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         color: #ffc600;
+        pointer-events: none;
+        user-select: none;
+        -moz-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -o-user-select: none;
     }
 </style>
 <body>
 
 <div class="keys">
-    <div class="key" data-key="65">
+    <div class="key" data-key="65" onclick="playSound()">
         <kbd>A</kbd>
         <span class="sound">dum</span>
     </div>
@@ -74,8 +86,16 @@
 <audio data-key="68" src="./sounds/CYCdh_Crash-03.mp3"></audio> 
 <script>
     function playSound(e){
-        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        let code;
+            if (e.keyCode) {
+                // it was a keypress, get the keycode as usual
+                code = e.keyCode;
+            } else {
+                // it was a click.  Read the keycode from the div that was clicked
+                code = this.dataset.key;
+            }
+        const audio = document.querySelector(`audio[data-key="${code}"]`);
+        const key = document.querySelector(`.key[data-key="${code}"]`);
         // console.log(audio);
         // console.log(e.keyCode);
         if(!audio) return; //stop the function from running alltogether
@@ -83,7 +103,6 @@
         audio.play();
         key.classList.add('playing');
     };
-    
 
     function removeTransition(e) {
         if (e.propertyName !== 'transform') return; //skip if its not a transform
@@ -92,7 +111,11 @@
     
     window.addEventListener('keydown', playSound );
     const keys = document.querySelectorAll('.key');
-    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    for (let i=0, key; key = keys[i]; i++) {
+        key.addEventListener('transitionend', removeTransition);
+        key.addEventListener('click', playSound);
+    }
+    //keys.forEach(key => key.addEventListener('transitionend', removeTransition));
 </script>
 
 </body>
