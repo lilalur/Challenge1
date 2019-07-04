@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        background: #aa8500;
+    }
+    .keys {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+    }
+    .key {
+        border: 4px solid black;
+        border-radius: 5px;
+        margin: 1rem;
+        font-size: 1.5rem;
+        padding: 1rem .5rem;
+        transition: all 0.1s;
+        width: 100px;
+        text-align: center;
+        color: white;
+        background: rgba(0,0,0,0.4);
+        text-shadow: 0 0 5px black;
+    }
+    .playing {
+        transform: scale(1.1);
+        border-color:#ffc600;
+        box-shadow: 0 0 5px black;
+    }
+    kbd {
+        display: block;
+        font-size: 40px;
+    }
+
+    .sound {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #ffc600;
+    }
+</style>
+<body>
+
+<div class="keys">
+    <div class="key" data-key="65">
+        <kbd>A</kbd>
+        <span class="sound">dum</span>
+    </div>
+    <div class="key" data-key="83">
+        <kbd>S</kbd>
+        <span class="sound">Chit</span>
+    </div>
+    <div class="key" data-key="68">
+        <kbd>D</kbd>
+        <span class="sound">Bong</span>
+    </div>
+</div>
+
+<audio data-key="65" src="./sounds/CYCdh_ElecK01-Kick02.wav"></audio>
+<audio data-key="83" src="./sounds/CYCdh_K4-Snr05.mp3"></audio> 
+<audio data-key="68" src="./sounds/CYCdh_Crash-03.mp3"></audio> 
+<script>
+    function playSound(e){
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        // console.log(audio);
+        // console.log(e.keyCode);
+        if(!audio) return; //stop the function from running alltogether
+        audio.currentTime = 0; //rewind to the start
+        audio.play();
+        key.classList.add('playing');
+    };
+    
+
+    function removeTransition(e) {
+        if (e.propertyName !== 'transform') return; //skip if its not a transform
+        this.classList.remove('playing');
+    }
+    
+    window.addEventListener('keydown', playSound );
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+</script>
+
+</body>
+</html>
