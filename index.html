@@ -118,11 +118,15 @@
     
     window.addEventListener('keydown', playSound );
     const keys = document.querySelectorAll('.key');
-    for (let i=0, key; key = keys[i]; i++) {
-        key.addEventListener('transitionend', removeTransition);
-        key.addEventListener('click', playSound);
-    }
-    //keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    // it can be done with a for cycle
+    // for (let i=0, key; key = keys[i]; i++) {
+    //     key.addEventListener('transitionend', removeTransition);
+    //     key.addEventListener('click', playSound);
+    // }
+    
+    keys.forEach(key => {key.addEventListener('transitionend', removeTransition),  key.addEventListener('click', playSound)});
+    //first try to run through the keys with a forEach
+    //keys.forEach(key => key.addEventListener('click', playSound));
 </script>
 
 </body>
